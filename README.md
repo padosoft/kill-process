@@ -29,8 +29,6 @@ This package can be installed easy.
 
 ``` bash
 cd /root/myscript
-mkdir kill-process
-cd kill-process/
 git clone https://github.com/padosoft/kill-process.git
 chmod +x killprocess.sh
 ```
@@ -39,7 +37,7 @@ If you want to run programmatically, add it to cronjobs manually or execute inst
 
 ``` bash
 cd /root/myscript
-chmod +x killprocess.sh
+chmod +x install.sh
 bash install.sh
 ```
 
