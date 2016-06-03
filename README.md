@@ -29,6 +29,8 @@ This package can be installed easy.
 
 ``` bash
 cd /root/myscript
+mkdir kill-process
+cd kill-process/
 git clone https://github.com/padosoft/kill-process.git
 chmod +x killprocess.sh
 ```
@@ -62,9 +64,11 @@ bash killprocess.sh --help
 # Screenshots
 
 Here is a screenshot with command kill
+
 ![demo](https://raw.githubusercontent.com/padosoft/kill-process/master/resources/img/screen1.png)
 
 Here is a screenshot with command dry (dry run and not kill)
+
 ![demo](https://raw.githubusercontent.com/padosoft/kill-process/master/resources/img/screen2.png)
 
 # Contributing
