@@ -30,13 +30,14 @@ This package can be installed easy.
 ``` bash
 cd /root/myscript
 git clone https://github.com/padosoft/kill-process.git
+cd kill-process
 chmod +x killprocess.sh
 ```
 
 If you want to run programmatically, add it to cronjobs manually or execute install script:
 
 ``` bash
-cd /root/myscript
+cd /root/myscript/kill-process
 chmod +x install.sh
 bash install.sh
 ```
