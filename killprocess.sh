@@ -160,9 +160,16 @@ do
       TIME_SEC=$((10#$c4+60*(10#$c3+60*(10#$c2+24*10#$c1))))
     elif [ -n "$c3" ]
     then
-      TIME_SEC=$((10#$c3+60*(10#$c2+60*10#$c1)))
+      if [ "$CMD" = "ps" ]; then
+        TIME_SEC=$((10#$c3+60*(10#$c2+60*10#$c1)))
+      else
+        TIME_SEC=$(((10#$c3*24)*60*60)+60*(10#$c2+60*10#$c1)))                
     else
-      TIME_SEC=$((10#0+(10#$c2+60*10#$c1)))
+      if [ "$CMD" = "ps" ]; then
+        TIME_SEC=$((10#0+(10#$c2+60*10#$c1)))
+      else
+        TIME_SEC=$((10#0+60*(10#$c2+60*10#$c1)))
+      fi
     fi
 
     #process summary
@@ -171,6 +178,10 @@ do
     else
         echo "${YELLOW}TOP %CPU consuming $PROCESS_TOCHECK process is:${NC}"
     fi
+    echo "c1:$c1"
+    echo "c2:$c2"
+    echo "c3:$c3"
+    echo "c4:$c4"
     echo "PID:$PID"
     echo "PNAME:$PNAME"
     echo "CPU:$CPU"
