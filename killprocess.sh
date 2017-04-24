@@ -26,6 +26,11 @@ RED=`tput setaf 1`
 GREEN=`tput setaf 2`
 YELLOW=`tput setaf 3`
 NC=`tput sgr0` # No Color
+#set screen width
+#if you command (specially if executed in cron) truncate columns to 80 less chars
+#and your line is too long, set the right columns number here.
+#leave empty string "" for default columns environment.
+COLSNUM=""
 
 #
 # PARSE ARGUMENTS
@@ -44,6 +49,13 @@ if [ "$1" = "" ] || [ "$1" = "--help" ] || [ $# -lt 1 ] || [ $# -gt 3 ]; then
         "OR" \
         "bash $0 --help" >&2
     exit 0
+fi
+
+#check if needed to set columns
+if [ "$COLSNUM" = "" ]; then    
+    echo "process use default environment columns number."
+else
+    echo "process set '${YELLOW}${COLSNUM}${NC}' columns number."        
 fi
 
 #kill or not kill?
@@ -68,6 +80,7 @@ else
 fi
 
 #process Sort by
+SORTBYN=""
 if [ "$3" = "cpu" ]; then
     if [ "$CMD" = "ps" ]; then
         SORTBY=2
@@ -80,15 +93,16 @@ elif [ "$3" = "time" ]; then
         SORTBY=3
     else
         SORTBY=11
+        SORTBYN="-n"
     fi
-    echo "Process sort by ${YELLOW}TIME${NC} ( $SORTBY )"
+    echo "Process sort by ${YELLOW}TIME${NC} ( $SORTBY $SORTBYN)"
 else
     if [ "$CMD" = "ps" ]; then
         SORTBY=2
     else
         SORTBY=9
     fi
-    echo "Process sort by ${YELLOW}TIME${NC} ( $SORTBY )"
+    echo "Process sort by default ${YELLOW}CPU${NC} ( $SORTBY )"
 fi
 
 
@@ -99,9 +113,17 @@ do
 
     #pid
     if [ "$CMD" = "ps" ]; then
+      if [ "$COLSNUM" = "" ]; then    
         PID=$(ps -eo pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $1}')
+      else
+        PID=$(ps --cols ${COLSNUM} -eo pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $1}')
+      fi
     else
-        PID=$(top -bcSH -n 1 | $EXCLUDE_ROOT  | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $1}')
+      if [ "$COLSNUM" = "" ]; then    
+        PID=$(top -bcSH -n 1 | $EXCLUDE_ROOT  | grep $PROCESS_TOCHECK | sort $SORTBYN -k $SORTBY -r | head -n 1 | awk '{print $1}')
+      else
+        PID=$(COLUMNS=${COLSNUM} top -bcSH -n 1 | $EXCLUDE_ROOT  | grep $PROCESS_TOCHECK | sort $SORTBYN -k $SORTBY -r | head -n 1 | awk '{print $1}')
+      fi
     fi
 
     if [ -z "$PID" ]; then
@@ -112,9 +134,17 @@ do
     #Fetch other process stats by pid
     #% CPU
     if [ "$CMD" = "ps" ]; then
+      if [ "$COLSNUM" = "" ]; then    
         CPU=$(ps -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $2}')
+      else
+        CPU=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $2}')
+      fi
     else
+      if [ "$COLSNUM" = "" ]; then    
         CPU=$(top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $9}')
+      else
+        CPU=$(COLUMNS=${COLSNUM} top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $9}')
+      fi    
     fi
 
     #format integer cpu
@@ -122,30 +152,55 @@ do
 
     #time elapsed d-HH:MM:ss
     if [ "$CMD" = "ps" ]; then
-        TIME_STR=$(ps -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $3}')
+      if [ "$COLSNUM" = "" ]; then    
+        TIME_STR=$(ps ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $3}')
+      else
+        TIME_STR=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $3}')
+      fi
     else
-        TIME_STR=$(top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $11}')
+      if [ "$COLSNUM" = "" ]; then    
+        TIME_STR=$(top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $11}') 
+      else
+        TIME_STR=$(COLUMNS=${COLSNUM} top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $11}')
+      fi
     fi
 
     #process name
-    if [ "$CMD" = "ps" ]; then
+    if [ "$COLSNUM" = "" ]; then  
         PNAME=$(ps -p $PID -o pid,pcpu,time,comm,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
     else
-        PNAME=$(ps -p $PID -o pid,pcpu,time,comm,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
+        PNAME=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,comm,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
     fi
 
     #full process command
     if [ "$CMD" = "ps" ]; then
+      if [ "$COLSNUM" = "" ]; then    
         COMMAND=$(ps -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
+      else
+        COMMAND=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
+      fi
     else
+      if [ "$COLSNUM" = "" ]; then    
         COMMAND=$(top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $12,$13,$14}')
+      else
+        COMMAND=$(COLUMNS=${COLSNUM} top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $12,$13,$14}')
+      fi
     fi
+
 
     #user
     if [ "$CMD" = "ps" ]; then
+      if [ "$COLSNUM" = "" ]; then    
         USER=$(ps -p $PID -o pid,pcpu,time,user,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
+      else
+        USER=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,user,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
+      fi
     else
+      if [ "$COLSNUM" = "" ]; then    
         USER=$(top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $2}')
+      else
+        USER=$(COLUMNS=${COLSNUM} top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $2}')
+      fi
     fi
 
     # Decode the CPU time format [dd-]hh:mm:ss.
