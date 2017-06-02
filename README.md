@@ -1,6 +1,6 @@
 
 # kill-process
-Bash script to kill high CPU and long running process. 
+Bash script to kill high CPU process, long running process and too much consuming memory process. 
 
 [![Software License][ico-license]](LICENSE.md)
 
@@ -45,7 +45,7 @@ bash install.sh
 
 # Usage
 ``` bash
-bash killprocess.sh [dry|kill|--help] [top|ps] [cpu|time]
+bash killprocess.sh [dry|kill|--help] [top|ps] [cpu|time|mem]
 ```
 
 ## Example
@@ -53,6 +53,8 @@ bash killprocess.sh [dry|kill|--help] [top|ps] [cpu|time]
 bash killprocess.sh dry
 bash killprocess.sh dry top
 bash killprocess.sh kill top cpu
+bash killprocess.sh dry ps mem
+bash killprocess.sh kill ps mem
 ```
 For help:
 ``` bash
