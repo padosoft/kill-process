@@ -182,7 +182,7 @@ do
         echo "PID:$PID"
         echo "PNAME:$PNAME"
         echo "CPU:$CPU"
-        echo "MEM:${MEMMB}MB"
+        echo "MEM:${MEMMB}MB (${MEM}kb)"
         MAX_RAM_MB=$((MAX_RAM / 1024))
         echo "MAX_RAM is ${MAX_RAM_MB}MB"
         echo "USER:$USER"
