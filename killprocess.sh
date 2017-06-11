@@ -12,7 +12,7 @@
 declare -a KILLLIST
 KILLLIST=("/usr/sbin/apache2" "/usr/bin/php5-cgi")
 #email (if empty no email will sent)
-EMAIL="helpdesk@padosoft.com"
+EMAIL="noemail@nomail.com"
 #max cpu % load
 MAX_CPU=90
 #max execution time for CPU percentage > MAX_CPU (in seconds 7200s=2h)
@@ -33,6 +33,19 @@ NC=`tput sgr0` # No Color
 #and your line is too long, set the right columns number here.
 #leave empty string "" for default columns environment.
 COLSNUM=""
+
+#
+# Load config file if exists
+#
+CONFIG_DIR=$( dirname "$(readlink -f "$0")" )
+CONFIG_FILE="$CONFIG_DIR/killprocess.config"
+
+if [[ -f $CONFIG_FILE ]]; then
+   echo "${YELLOW}Loading settings from $CONFIG_FILE. ${NC}"
+   source $CONFIG_FILE
+else
+   echo "${RED}Could not load settings from $CONFIG_FILE (file does not exist), kill process use default settings.${NC}"
+fi
 
 #
 # PARSE ARGUMENTS

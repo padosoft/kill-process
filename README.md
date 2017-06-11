@@ -34,6 +34,14 @@ cd kill-process
 chmod +x killprocess.sh
 ```
 
+If you want to set your value and override default var values create a killprocess.config file by coping the given template killprocess.config.template, open in your favorite editor and make changes:
+
+``` bash
+cp /root/myscript/kill-process/killprocess.config.template /root/myscript/kill-process/killprocess.config 
+
+nano /root/myscript/kill-process/killprocess.config
+```
+
 If you want to run programmatically, add it to cronjobs manually or execute install script:
 
 ``` bash

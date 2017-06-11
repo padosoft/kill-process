@@ -1,0 +1,32 @@
+#!/bin/bash
+# local config file template used by killprocess.sh, 
+# USAGE:
+# rename this file killprocess.config and set your vars.
+# killprocess.config is excluded from git
+
+#process command name to check
+KILLLIST=("/usr/sbin/apache2" "/usr/bin/php5-cgi")
+
+#email (if empty no email will be sent)
+EMAIL="noemail@nomail.com"
+
+#max cpu % load
+MAX_CPU=90
+
+#max execution time for CPU percentage > MAX_CPU (in seconds 7200s=2h)
+MAX_SEC=1800
+
+#max execution time for any %CPU (in seconds 2700s=45min)
+MAX_SEC2=2700
+
+#MAX_RAM in Kilobytes ex.: 250MB = 250*1024 = 256000 kb, 350MB=358400)
+MAX_RAM=358400
+
+#exclude root process (leave empty for match root process too)
+EXCLUDE_ROOT="grep -v root"
+
+#set screen width
+#if you command (specially if executed in cron) truncate columns to 80 less chars
+#and your line is too long, set the right columns number here.
+#leave empty string "" for default columns environment.
+COLSNUM=""
