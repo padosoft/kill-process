@@ -257,7 +257,7 @@ do
       fi
   
       #format integer cpu
-      CPU=${CPU%%.*}
+      CPU=${CPU%%[.,]*}
   
       #time elapsed d-HH:MM:ss
       if [ "$CMD" = "ps" ]; then
