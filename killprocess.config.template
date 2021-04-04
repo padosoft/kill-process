@@ -23,7 +23,7 @@ MAX_SEC2=2700
 MAX_RAM=358400
 
 #exclude root process (leave empty for match root process too)
-EXCLUDE_ROOT="grep -v root"
+INCLUDE_ROOT="grep -v root"
 
 #set screen width
 #if you command (specially if executed in cron) truncate columns to 80 less chars
