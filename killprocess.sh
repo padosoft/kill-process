@@ -124,7 +124,7 @@ fi
 
 
 #iterate for each process to check in list
-for PROCESS_TOCHECK in ${KILLLIST[*]}
+for PROCESS_TOCHECK in "${KILLLIST[*]}"
 do
     echo "Check ${YELLOW}$PROCESS_TOCHECK${NC} process..."
 
@@ -134,9 +134,9 @@ do
         
         #pid
         if [ "$COLSNUM" = "" ]; then
-            PID=$(ps -eo pid,rss,command --sort -rss | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | head -n 1 | awk '{print $1}')
+            PID=$(ps -eo pid,rss,command --sort -rss | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | head -n 1 | awk '{print $1}')
         else
-            PID=$(ps --cols ${COLSNUM} -eo pid,rss,command --sort -rss | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | head -n 1 | awk '{print $1}')
+            PID=$(ps --cols ${COLSNUM} -eo pid,rss,command --sort -rss | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | head -n 1 | awk '{print $1}')
         fi
     
         if [ -z "$PID" ]; then
@@ -146,9 +146,9 @@ do
       
         #MEM
         if [ "$COLSNUM" = "" ]; then
-            MEM=$(ps -eo pid,rss,command --sort -rss | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | head -n 1 | awk '{print $2}')
+            MEM=$(ps -eo pid,rss,command --sort -rss | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | head -n 1 | awk '{print $2}')
         else
-            MEM=$(ps --cols ${COLSNUM} -eo pid,rss,command --sort -rss | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | head -n 1 | awk '{print $2}')
+            MEM=$(ps --cols ${COLSNUM} -eo pid,rss,command --sort -rss | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | head -n 1 | awk '{print $2}')
         fi
     
         if [ -z "$MEM" ]; then
@@ -161,9 +161,9 @@ do
         #Fetch other process stats by pid
         #% CPU
         if [ "$COLSNUM" = "" ]; then    
-          CPU=$(ps -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | head -n 1 | awk '{print $2}')
+          CPU=$(ps -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | head -n 1 | awk '{print $2}')
         else
-          CPU=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | head -n 1 | awk '{print $2}')
+          CPU=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | head -n 1 | awk '{print $2}')
         fi
     
         #format integer cpu
@@ -171,23 +171,23 @@ do
       
         #process name
         if [ "$COLSNUM" = "" ]; then  
-            PNAME=$(ps -p $PID -o pid,pcpu,time,comm,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | head -n 1 | awk '{print $4}')
+            PNAME=$(ps -p $PID -o pid,pcpu,time,comm,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | head -n 1 | awk '{print $4}')
         else
-            PNAME=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,comm,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | head -n 1 | awk '{print $4}')
+            PNAME=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,comm,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | head -n 1 | awk '{print $4}')
         fi
   
         #full process command
         if [ "$COLSNUM" = "" ]; then    
-            COMMAND=$(ps -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | head -n 1 | awk '{print $4}')
+            COMMAND=$(ps -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | head -n 1 | awk '{print $4}')
         else
-            COMMAND=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | head -n 1 | awk '{print $4}')
+            COMMAND=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | head -n 1 | awk '{print $4}')
         fi
   
         #user
         if [ "$COLSNUM" = "" ]; then    
-            USER=$(ps -p $PID -o pid,pcpu,time,user,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | head -n 1 | awk '{print $4}')
+            USER=$(ps -p $PID -o pid,pcpu,time,user,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | head -n 1 | awk '{print $4}')
         else
-            USER=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,user,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | head -n 1 | awk '{print $4}')
+            USER=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,user,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | head -n 1 | awk '{print $4}')
         fi
       
         #process summary
@@ -236,15 +236,15 @@ do
       #pid
       if [ "$CMD" = "ps" ]; then
         if [ "$COLSNUM" = "" ]; then    
-          PID=$(ps -eo pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $1}')
+          PID=$(ps -eo pid,pcpu,time,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $1}')
         else
-          PID=$(ps --cols ${COLSNUM} -eo pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $1}')
+          PID=$(ps --cols ${COLSNUM} -eo pid,pcpu,time,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $1}')
         fi
       else
         if [ "$COLSNUM" = "" ]; then    
-          PID=$(top -bcSH -n 1 | $EXCLUDE_ROOT  | grep $PROCESS_TOCHECK | sort $SORTBYN -k $SORTBY -r | head -n 1 | awk '{print $1}')
+          PID=$(top -bcSH -n 1 | $EXCLUDE_ROOT  | grep "$PROCESS_TOCHECK" | sort $SORTBYN -k $SORTBY -r | head -n 1 | awk '{print $1}')
         else
-          PID=$(COLUMNS=${COLSNUM} top -bcSH -n 1 | $EXCLUDE_ROOT  | grep $PROCESS_TOCHECK | sort $SORTBYN -k $SORTBY -r | head -n 1 | awk '{print $1}')
+          PID=$(COLUMNS=${COLSNUM} top -bcSH -n 1 | $EXCLUDE_ROOT  | grep "$PROCESS_TOCHECK" | sort $SORTBYN -k $SORTBY -r | head -n 1 | awk '{print $1}')
         fi
       fi
   
@@ -257,15 +257,15 @@ do
       #% CPU
       if [ "$CMD" = "ps" ]; then
         if [ "$COLSNUM" = "" ]; then    
-          CPU=$(ps -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $2}')
+          CPU=$(ps -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $2}')
         else
-          CPU=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $2}')
+          CPU=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $2}')
         fi
       else
         if [ "$COLSNUM" = "" ]; then    
-          CPU=$(top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $9}')
+          CPU=$(top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $9}')
         else
-          CPU=$(COLUMNS=${COLSNUM} top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $9}')
+          CPU=$(COLUMNS=${COLSNUM} top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $9}')
         fi    
       fi
   
@@ -275,37 +275,37 @@ do
       #time elapsed d-HH:MM:ss
       if [ "$CMD" = "ps" ]; then
         if [ "$COLSNUM" = "" ]; then    
-          TIME_STR=$(ps ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $3}')
+          TIME_STR=$(ps ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $3}')
         else
-          TIME_STR=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $3}')
+          TIME_STR=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $3}')
         fi
       else
         if [ "$COLSNUM" = "" ]; then    
-          TIME_STR=$(top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $11}') 
+          TIME_STR=$(top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $11}') 
         else
-          TIME_STR=$(COLUMNS=${COLSNUM} top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $11}')
+          TIME_STR=$(COLUMNS=${COLSNUM} top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $11}')
         fi
       fi
   
       #process name
       if [ "$COLSNUM" = "" ]; then  
-          PNAME=$(ps -p $PID -o pid,pcpu,time,comm,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
+          PNAME=$(ps -p $PID -o pid,pcpu,time,comm,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
       else
-          PNAME=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,comm,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
+          PNAME=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,comm,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
       fi
   
       #full process command
       if [ "$CMD" = "ps" ]; then
         if [ "$COLSNUM" = "" ]; then    
-          COMMAND=$(ps -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
+          COMMAND=$(ps -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
         else
-          COMMAND=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
+          COMMAND=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
         fi
       else
         if [ "$COLSNUM" = "" ]; then    
-          COMMAND=$(top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $12,$13,$14}')
+          COMMAND=$(top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $12,$13,$14}')
         else
-          COMMAND=$(COLUMNS=${COLSNUM} top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $12,$13,$14}')
+          COMMAND=$(COLUMNS=${COLSNUM} top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $12,$13,$14}')
         fi
       fi
   
@@ -313,15 +313,15 @@ do
       #user
       if [ "$CMD" = "ps" ]; then
         if [ "$COLSNUM" = "" ]; then    
-          USER=$(ps -p $PID -o pid,pcpu,time,user,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
+          USER=$(ps -p $PID -o pid,pcpu,time,user,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
         else
-          USER=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,user,command | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
+          USER=$(ps --cols ${COLSNUM} -p $PID -o pid,pcpu,time,user,command | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $4}')
         fi
       else
         if [ "$COLSNUM" = "" ]; then    
-          USER=$(top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $2}')
+          USER=$(top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $2}')
         else
-          USER=$(COLUMNS=${COLSNUM} top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep $PROCESS_TOCHECK | sort -k $SORTBY -r | head -n 1 | awk '{print $2}')
+          USER=$(COLUMNS=${COLSNUM} top -p $PID -bcSH -n 1 | $EXCLUDE_ROOT | grep "$PROCESS_TOCHECK" | sort -k $SORTBY -r | head -n 1 | awk '{print $2}')
         fi
       fi
   
